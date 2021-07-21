@@ -33,13 +33,15 @@ class App
 {
     public function log($data, Logger $logger = null)
     {
-        $logger ?: (new LogIntoFile);
+        $logger = $logger ? $logger : (new LogIntoFile);
 
         $logger->log($data);
     }
 }
 
 $app = new App();
+$app->log("some inf");
+
 $app->log("Some information here", new LogToXWebService);
 
 $app->log("Some information there", new LogToDatabase);
