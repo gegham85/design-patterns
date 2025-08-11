@@ -59,7 +59,21 @@ class CircleFactory implements ShapeFactory
     }
 }
 
+class DrawShape
+{
+    protected Shape $shape;
+
+    public function __construct(ShapeFactory $shapeFactory) 
+    {
+        $this->shape = $shapeFactory->getShape();
+    }
+
+    public function drawShape()
+    {
+        $this->shape->draw();
+    }
+}
 
 // demo
-$shape1 = new ShapeFactory()->getShape();
-$shape1->draw();
+$drawShape = new DrawShape(new RectangleFactory());
+$drawShape->drawShape();
