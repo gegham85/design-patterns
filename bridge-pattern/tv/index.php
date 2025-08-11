@@ -78,7 +78,7 @@ abstract class Remote
 
     public function togglePower()
     {
-        if ($this->device->getStatus() === "off") {
+        if (!$this->device->getStatus() === "on") {
             $this->device->powerOn();
         } else {
             $this->device->powerOff();
@@ -92,7 +92,15 @@ abstract class Remote
 }
 
 // ------------------------------------------------------------
-// Refined Abstraction
+// Refined Abstraction (This is the one we should instantiate)
+class BasicRemote extends Remote
+{
+    public function __construct(Device $device)
+    {
+        parent::__construct($device);
+    }
+}
+
 class AdvancedRemote extends Remote
 {
     public function __construct(Device $device)
@@ -108,22 +116,27 @@ class AdvancedRemote extends Remote
 }
 
 // ------------------------------------------------------------
-// Usage
+// Usage:
+// This is the key difference. We create from the concrete child class.
+
 $tv = new Tv();
-$basicRemote = new Remote($tv);
+$basicRemote = new BasicRemote($tv); // Correct: Instantiate a concrete child class
 
 $basicRemote->togglePower(); // Turns the TV on
 $basicRemote->setChannel(15);
 echo $tv->getStatus() . "\n";
 // Output: TV is on, on channel 15
 
+echo "\n";
+
 $radio = new Radio();
-$advancedRemote = new AdvancedRemote($radio);
+$advancedRemote = new AdvancedRemote($radio); // Correct: Instantiate a concrete child class
 
 $advancedRemote->togglePower(); // Turns the radio on
 $advancedRemote->setChannel(98.1);
 echo $radio->getStatus() . "\n";
 // Output: Radio is on, tuned to 98.1 MHz
+
 $advancedRemote->mute(); // Mutes the radio
 echo $radio->getStatus() . "\n";
 // Output: Radio is off, tuned to 98.1 MHz
